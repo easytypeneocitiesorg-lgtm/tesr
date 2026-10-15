@@ -2,303 +2,1039 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Haiku 5.5 Test</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0506">
+<title>Crimson AI</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #0b0d12;
-      color: #edf0f7;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    }
+:root {
+  --bg: #0b0506;
+  --panel: #13090b;
+  --panel2: #1a0d0f;
+  --border: #3a1a1f;
+  --red: #ef4444;
+  --crimson: #b91c1c;
+  --text: #f9eeee;
+  --muted: #a58c90;
+  --glass: rgba(26, 13, 15, .82);
+}
 
-    main {
-      width: 100%;
-      max-width: 760px;
-      padding: 24px;
-      background: #141821;
-      border: 1px solid #2b3140;
-      border-radius: 18px;
-      box-shadow: 0 24px 80px #0006;
-    }
+* { box-sizing: border-box; }
 
-    h1 {
-      margin: 0 0 6px;
-      font-size: 1.8rem;
-    }
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
 
-    .subtitle,
-    .hint {
-      color: #a7afc0;
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+}
 
-    .subtitle {
-      margin: 0 0 24px;
-    }
+button, textarea { font: inherit; }
 
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: 650;
-    }
+button { color: inherit; }
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 12px 13px;
-      border: 1px solid #343c4d;
-      border-radius: 10px;
-      background: #0d1119;
-      color: #edf0f7;
-      font: inherit;
-    }
+#particles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+.app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
 
-    input:focus,
-    textarea:focus {
-      outline: 2px solid #b98aff;
-      outline-offset: 2px;
-    }
+.topbar {
+  height: 66px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(239,68,68,.12);
+  background: rgba(11,5,6,.75);
+  backdrop-filter: blur(20px);
+}
 
-    .hint {
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -.6px;
+}
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin-top: 16px;
-    }
+.brand-name {
+  background: linear-gradient(100deg, #fff, #ffb4b4);
+  color: transparent;
+  background-clip: text;
+}
 
-    button {
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 10px;
-      background: #d6b7ff;
-      color: #211332;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.logo {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #ef4444, #8f101d);
+  box-shadow: 0 0 24px #ef444433;
+  animation: float 3.5s ease-in-out infinite;
+}
 
-    button:hover {
-      background: #e2ccff;
-    }
+.logo svg { width: 23px; height: 23px; }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: wait;
-    }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
 
-    code {
-      color: #d6b7ff;
-      overflow-wrap: anywhere;
-    }
+.top-actions { display: flex; gap: 8px; }
 
-    #status {
-      margin-top: 20px;
-      color: #a7afc0;
-      font-size: 0.9rem;
-      overflow-wrap: anywhere;
-    }
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,.025);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: .25s ease;
+}
 
-    #output {
-      min-height: 120px;
-      margin-top: 10px;
-      padding: 16px;
-      border: 1px solid #2b3140;
-      border-radius: 12px;
-      background: #0d1119;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      line-height: 1.65;
-    }
+.icon-btn:hover {
+  border-color: var(--red);
+  background: #ef444415;
+  box-shadow: 0 0 18px #ef444414;
+  transform: translateY(-1px);
+}
 
-    .warning {
-      margin-top: 20px;
-      padding: 12px;
-      border-left: 3px solid #e6b566;
-      border-radius: 6px;
-      background: #241d13;
-      color: #f0d8ae;
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
-  </style>
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #e9cdd0;
+}
+
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.messages {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 36px 24px 20px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #542127 transparent;
+}
+
+.welcome {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0 70px;
+  animation: appear .45s ease both;
+}
+
+.welcome-logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 23px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #ef4444, #7f1420);
+  box-shadow: 0 0 65px #ef444426;
+  margin-bottom: 27px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.welcome-logo svg { width: 43px; height: 43px; }
+
+.welcome h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 49px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.15;
+  background: linear-gradient(100deg, #fff 20%, #ffd0d0 65%, #ef4444);
+  background-clip: text;
+  color: transparent;
+}
+
+.welcome p {
+  max-width: 440px;
+  margin: 15px 0 30px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 540px;
+}
+
+.suggestion {
+  text-align: left;
+  padding: 15px;
+  min-height: 78px;
+  background: rgba(26,13,15,.72);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.suggestion:hover {
+  border-color: #a32d36;
+  background: #251013;
+  transform: translateY(-2px);
+}
+
+.suggestion strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.suggestion span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.message {
+  display: flex;
+  gap: 13px;
+  margin-bottom: 28px;
+  animation: appear .25s ease both;
+}
+
+.message.user { flex-direction: row-reverse; }
+
+.avatar {
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--panel2);
+}
+
+.avatar svg { width: 19px; height: 19px; }
+
+.message.user .avatar {
+  background: #40151a;
+  color: #ffb4b4;
+}
+
+.message-body {
+  min-width: 0;
+  max-width: calc(100% - 44px);
+  line-height: 1.75;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.message.user .message-body {
+  max-width: 80%;
+  background: #241014;
+  border: 1px solid #492026;
+  border-radius: 16px 5px 16px 16px;
+  padding: 11px 15px;
+}
+
+.message.assistant .message-body { padding: 3px 0; }
+
+.message-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 14px;
+  background: #10080a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.message-body code {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #ffb4b4;
+}
+
+.message-body p { margin: 0 0 12px; }
+.message-body p:last-child { margin-bottom: 0; }
+.message-body ul, .message-body ol { padding-left: 22px; }
+
+.typing {
+  display: flex;
+  gap: 5px;
+  padding: 10px 0;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: bounce 1s infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: .15s; }
+.typing span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes bounce {
+  0%,60%,100% { transform: translateY(0); opacity: .4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.composer-area {
+  width: 100%;
+  max-width: 850px;
+  padding: 0 24px 17px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+.composer {
+  border: 1px solid #492127;
+  background: rgba(26,13,15,.92);
+  backdrop-filter: blur(22px);
+  border-radius: 19px;
+  padding: 15px 15px 11px;
+  box-shadow: 0 10px 45px #0003, 0 0 25px #ef444407;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+.composer:focus-within {
+  border-color: #8c3038;
+  box-shadow: 0 10px 45px #0003, 0 0 25px #ef444410;
+}
+
+#prompt {
+  width: 100%;
+  display: block;
+  resize: none;
+  min-height: 44px;
+  max-height: 200px;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+#prompt::placeholder { color: #80696d; }
+
+.composer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 9px;
+}
+
+.model-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid #462026;
+  border-radius: 10px;
+  background: #200f12;
+  color: #e9d6d8;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.claude-mark {
+  width: 17px;
+  height: 17px;
+  color: #ffb4a4;
+  flex-shrink: 0;
+}
+
+.model-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 9px #ef4444;
+}
+
+.send-btn {
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #f05252, #b91c1c);
+  cursor: pointer;
+  box-shadow: 0 3px 15px #ef44442a;
+  transition: .2s ease;
+}
+
+.send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 22px #ef444455;
+}
+
+.send-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+.send-btn svg { width: 18px; height: 18px; stroke: white; }
+
+.disclaimer {
+  text-align: center;
+  font-size: 10px;
+  color: #735b60;
+  margin-top: 10px;
+}
+
+.tools-wrap {
+  position: fixed;
+  z-index: 10;
+  bottom: 18px;
+  left: 18px;
+}
+
+.tools-menu {
+  position: absolute;
+  bottom: 49px;
+  left: 0;
+  width: 190px;
+  padding: 7px;
+  background: #1a0d0f;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px #0008;
+  opacity: 0;
+  transform: translateY(8px) scale(.98);
+  transform-origin: bottom left;
+  pointer-events: none;
+  transition: .2s ease;
+}
+
+.tools-wrap:hover .tools-menu,
+.tools-wrap:focus-within .tools-menu,
+.tools-wrap.open .tools-menu {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.tool-item {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tool-item:hover { background: #ef444414; }
+
+.status {
+  position: fixed;
+  z-index: 5;
+  bottom: 23px;
+  right: 22px;
+  max-width: 55%;
+  font-size: 10px;
+  color: #735b60;
+  text-align: right;
+  pointer-events: none;
+}
+
+.toast {
+  position: fixed;
+  z-index: 20;
+  top: 80px;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 11px 17px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #241014;
+  color: #ffdcdc;
+  font-size: 12px;
+  transition: .2s ease;
+}
+
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 600px) {
+  .topbar { height: 58px; padding: 0 15px; }
+  .messages { padding: 25px 15px 15px; }
+  .composer-area { padding: 0 12px 13px; }
+  .welcome { padding-bottom: 30px; }
+  .welcome h1 { letter-spacing: -1.5px; }
+  .welcome p { font-size: 13px; }
+  .suggestions { gap: 8px; }
+  .suggestion { padding: 12px; }
+  .tools-wrap { bottom: 9px; left: 9px; }
+  .status { bottom: 13px; right: 12px; }
+  .model-indicator { font-size: 10px; padding: 7px; }
+  .disclaimer { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
 
 <body>
-  <main>
-    <h1>Claude Haiku 5.5 Test</h1>
+<canvas id="particles"></canvas>
 
-    <p class="subtitle">
-      Test Claude through the OpenRouter API.
-    </p>
-
-    <label for="apiKey">OpenRouter API key</label>
-
-    <input
-      id="apiKey"
-      type="password"
-      placeholder="sk-or-v1-..."
-      autocomplete="off"
-      spellcheck="false"
-    >
-
-    <p class="hint">
-      Enter your API key here. It is not saved by this page.
-    </p>
-
-    <label for="prompt">Your message</label>
-
-    <textarea id="prompt">Hi! Briefly introduce yourself and tell me which model you are running.</textarea>
-
-    <div class="row">
-      <button id="send">Send message</button>
-
-      <span class="hint">
-        Model: <code>anthropic/claude-haiku-5.5</code>
-      </span>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M20 4L23 15L34 10L27 20L36 27L24 26L20 37L16 26L4 29L13 20L5 12L17 15Z"
+            fill="white"/>
+        </svg>
+      </div>
+      <span class="brand-name">Crimson AI</span>
     </div>
 
-    <div id="status" role="status" aria-live="polite">
-      Ready.
+    <div class="top-actions">
+      <button class="icon-btn" id="newChat" title="New chat" aria-label="New chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="exportChat" title="Export conversation" aria-label="Export conversation">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+          <path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/>
+        </svg>
+      </button>
     </div>
+  </header>
 
-    <label for="output">Response</label>
+  <main class="workspace">
+    <section class="messages" id="messages" aria-live="polite">
+      <div class="welcome" id="welcome">
+        <div class="welcome-logo">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M20 4L23 15L34 10L27 20L36 27L24 26L20 37L16 26L4 29L13 20L5 12L17 15Z"
+              fill="white"/>
+          </svg>
+        </div>
 
-    <div id="output">The response will appear here.</div>
+        <h1>What are we building?</h1>
+        <p>
+          Your ideas, questions, and projects start here.
+          Powered by Claude Haiku 5.5.
+        </p>
 
-    <div class="warning">
-      Never publish a real API key in frontend code. Anyone using a
-      publicly hosted page can inspect its requests. Use a server-side
-      proxy for a public website.
+        <div class="suggestions">
+          <button class="suggestion" data-prompt="Help me brainstorm a creative project.">
+            <strong>✦ Brainstorm ideas</strong>
+            <span>Turn a thought into a plan</span>
+          </button>
+          <button class="suggestion" data-prompt="Explain a difficult topic to me simply, with examples.">
+            <strong>⌘ Learn something</strong>
+            <span>Make complex topics simple</span>
+          </button>
+          <button class="suggestion" data-prompt="Help me write clean, well-structured code for a project.">
+            <strong>⌁ Write code</strong>
+            <span>Build and debug projects</span>
+          </button>
+          <button class="suggestion" data-prompt="Help me write something creative and original.">
+            <strong>✎ Get creative</strong>
+            <span>Write, imagine, and explore</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="composer-area">
+      <div class="composer">
+        <textarea id="prompt" rows="1" maxlength="12000"
+          placeholder="Message Claude..." aria-label="Your message"></textarea>
+
+        <div class="composer-bottom">
+          <div class="model-indicator" title="Active model">
+            <svg class="claude-mark" viewBox="0 0 32 32" fill="currentColor" aria-label="Claude">
+              <path d="M16 1.5 19.2 12l10-5.4-5.5 9.4 7.1 6.1-11-.6L16 31l-3.8-9.5-10.7 2.7 7.7-8.1-6.8-7.3 10.1 3.2z"/>
+            </svg>
+            <span>Claude Haiku 5.5</span>
+            <span class="model-dot"></span>
+          </div>
+
+          <button class="send-btn" id="send" aria-label="Send message" title="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="disclaimer">Claude can make mistakes. Verify important information.</div>
     </div>
   </main>
+</div>
 
-  <script>
-    const apiKeyInput = document.getElementById("apiKey");
-    const promptInput = document.getElementById("prompt");
-    const sendButton = document.getElementById("send");
-    const statusElement = document.getElementById("status");
-    const outputElement = document.getElementById("output");
+<div class="tools-wrap" id="toolsWrap">
+  <div class="tools-menu">
+    <button class="tool-item" id="clearChat">＋ New conversation</button>
+    <button class="tool-item" id="copyChat">▣ Copy conversation</button>
+    <button class="tool-item" id="downloadChat">↓ Download conversation</button>
+  </div>
+  <button class="icon-btn" id="toolsButton" aria-label="Chat tools" title="Chat tools">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+      <circle cx="5" cy="12" r="1"/>
+      <circle cx="12" cy="12" r="1"/>
+      <circle cx="19" cy="12" r="1"/>
+    </svg>
+  </button>
+</div>
 
-    async function sendMessage() {
-      const apiKey = apiKeyInput.value.trim();
-      const prompt = promptInput.value.trim();
+<div class="status" id="status">Ready</div>
+<div class="toast" id="toast"></div>
 
-      if (!apiKey) {
-        statusElement.textContent = "Enter your OpenRouter API key first.";
-        apiKeyInput.focus();
-        return;
-      }
+<script>
+/*
+  CONFIGURATION
 
-      if (!prompt) {
-        statusElement.textContent = "Enter a message first.";
-        promptInput.focus();
-        return;
-      }
+  This page expects your hosting setup to inject CLAUDE_KEY into
+  window.CLAUDE_KEY, or to provide a compatible build-time replacement.
 
-      sendButton.disabled = true;
-      statusElement.textContent = "Contacting OpenRouter...";
-      outputElement.textContent = "";
+  A normal static HTML file cannot directly read server environment
+  variables. If your Wasmer deployment has a documented injection
+  mechanism, connect it here.
+*/
+const API_KEY = window.CLAUDE_KEY || "";
+const MODEL = "anthropic/claude-haiku-5.5";
+const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-      try {
-        const response = await fetch(
-          "https://openrouter.ai/api/v1/chat/completions",
-          {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              model: "anthropic/claude-haiku-5.5",
-              messages: [
-                {
-                  role: "user",
-                  content: prompt
-                }
-              ],
-              max_tokens: 600,
-              temperature: 0.7
-            })
-          }
-        );
+const messagesEl = document.getElementById("messages");
+const welcomeEl = document.getElementById("welcome");
+const promptEl = document.getElementById("prompt");
+const sendBtn = document.getElementById("send");
+const statusEl = document.getElementById("status");
+const toastEl = document.getElementById("toast");
 
-        const data = await response.json();
+let conversation = [];
+let busy = false;
+let toastTimer;
 
-        if (!response.ok) {
-          throw new Error(
-            data?.error?.message ||
-            `HTTP ${response.status}: ${response.statusText}`
-          );
-        }
+function showToast(message) {
+  toastEl.textContent = message;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
 
-        const answer = data?.choices?.[0]?.message?.content;
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
 
-        if (typeof answer !== "string") {
-          throw new Error("The API returned no text response.");
-        }
+function formatMessage(text) {
+  let safe = escapeHTML(text);
 
-        outputElement.textContent = answer;
+  safe = safe.replace(/```([\w-]*)\n?([\s\S]*?)```/g,
+    (_, lang, code) =>
+      `<pre><code>${code.trim()}</code></pre>`
+  );
 
-        const model = data.model || "Unknown model";
-        const usage = data.usage;
+  safe = safe.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  safe = safe.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  safe = safe.replace(/^### (.+)$/gm, "<strong>$1</strong>");
+  safe = safe.replace(/^## (.+)$/gm, "<strong>$1</strong>");
+  safe = safe.replace(/^# (.+)$/gm, "<strong>$1</strong>");
+  safe = safe.replace(/^- (.+)$/gm, "• $1");
+  safe = safe.replace(/\n/g, "<br>");
 
-        let details = `Success · ${model}`;
+  return safe;
+}
 
-        if (usage) {
-          details +=
-            ` · ${usage.prompt_tokens ?? "?"} input tokens` +
-            ` / ${usage.completion_tokens ?? "?"} output tokens`;
-        }
+const assistantIcon = `
+<svg viewBox="0 0 32 32" fill="#ffb4a4" aria-hidden="true">
+  <path d="M16 1.5 19.2 12l10-5.4-5.5 9.4 7.1 6.1-11-.6L16 31l-3.8-9.5-10.7 2.7 7.7-8.1-6.8-7.3 10.1 3.2z"/>
+</svg>`;
 
-        statusElement.textContent = details;
+const userIcon = `
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+stroke-width="1.7" aria-hidden="true">
+  <circle cx="12" cy="8" r="4"/>
+  <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+</svg>`;
 
-      } catch (error) {
-        statusElement.textContent = "Request failed.";
+function scrollToBottom() {
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
 
-        outputElement.textContent =
-          `${error.message}\n\n` +
-          "Check that your API key is valid, your account has " +
-          "sufficient credits if required, and the model ID is available. " +
-          "If the browser reports a network or CORS error, try serving " +
-          "this file from localhost instead of opening it directly.";
+function renderMessage(role, text) {
+  const welcome = document.getElementById("welcome");
+  if (welcome) welcome.remove();
 
-      } finally {
-        sendButton.disabled = false;
-      }
+  const article = document.createElement("article");
+  article.className = `message ${role}`;
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.innerHTML = role === "user" ? userIcon : assistantIcon;
+
+  const body = document.createElement("div");
+  body.className = "message-body";
+  body.innerHTML = formatMessage(text);
+
+  article.append(avatar, body);
+  messagesEl.appendChild(article);
+  scrollToBottom();
+
+  return article;
+}
+
+function showTyping() {
+  const article = document.createElement("article");
+  article.className = "message assistant";
+  article.id = "typingIndicator";
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.innerHTML = assistantIcon;
+
+  const body = document.createElement("div");
+  body.className = "message-body";
+  body.innerHTML = `
+    <div class="typing">
+      <span></span><span></span><span></span>
+    </div>`;
+
+  article.append(avatar, body);
+  messagesEl.appendChild(article);
+  scrollToBottom();
+}
+
+async function sendMessage() {
+  const text = promptEl.value.trim();
+
+  if (!text || busy) return;
+
+  if (!API_KEY) {
+    showToast("CLAUDE_KEY isn't available in this page.");
+    statusEl.textContent = "API key configuration required";
+    return;
+  }
+
+  busy = true;
+  sendBtn.disabled = true;
+  promptEl.disabled = true;
+  statusEl.textContent = "Claude is thinking...";
+
+  conversation.push({ role: "user", content: text });
+  renderMessage("user", text);
+
+  promptEl.value = "";
+  resizePrompt();
+  showTyping();
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: conversation,
+        max_tokens: 2048,
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    document.getElementById("typingIndicator")?.remove();
+
+    if (!response.ok) {
+      throw new Error(
+        data?.error?.message || `Request failed (${response.status})`
+      );
     }
 
-    sendButton.addEventListener("click", sendMessage);
+    const answer = data?.choices?.[0]?.message?.content;
 
-    promptInput.addEventListener("keydown", event => {
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key === "Enter"
-      ) {
-        sendMessage();
+    if (typeof answer !== "string") {
+      throw new Error("The model returned no text.");
+    }
+
+    conversation.push({ role: "assistant", content: answer });
+    renderMessage("assistant", answer);
+
+    const usage = data.usage;
+    statusEl.textContent = usage
+      ? `Ready · ${usage.total_tokens ?? "?"} tokens`
+      : "Ready";
+
+  } catch (error) {
+    document.getElementById("typingIndicator")?.remove();
+
+    const message = error.message || "Unknown error";
+    renderMessage(
+      "assistant",
+      `**Request failed**\n\n${message}\n\nCheck the model ID, API access, and browser network permissions.`
+    );
+
+    conversation.pop();
+    statusEl.textContent = "Request failed";
+  } finally {
+    busy = false;
+    sendBtn.disabled = false;
+    promptEl.disabled = false;
+    promptEl.focus();
+  }
+}
+
+function resizePrompt() {
+  promptEl.style.height = "auto";
+  promptEl.style.height =
+    Math.min(promptEl.scrollHeight, 200) + "px";
+}
+
+function newChat() {
+  if (busy) return;
+
+  conversation = [];
+  messagesEl.innerHTML = "";
+  messagesEl.appendChild(welcomeEl);
+  statusEl.textContent = "New conversation";
+  promptEl.value = "";
+  resizePrompt();
+}
+
+function getTranscript() {
+  return conversation.map(message =>
+    `${message.role === "user" ? "You" : "Claude"}:\n${message.content}`
+  ).join("\n\n");
+}
+
+function downloadTranscript() {
+  if (!conversation.length) {
+    showToast("There's no conversation to export yet.");
+    return;
+  }
+
+  const blob = new Blob([getTranscript()], {
+    type: "text/plain;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "crimson-conversation.txt";
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("send").addEventListener("click", sendMessage);
+document.getElementById("newChat").addEventListener("click", newChat);
+document.getElementById("clearChat").addEventListener("click", newChat);
+document.getElementById("exportChat").addEventListener("click", downloadTranscript);
+document.getElementById("downloadChat").addEventListener("click", downloadTranscript);
+
+document.getElementById("copyChat").addEventListener("click", async () => {
+  if (!conversation.length) {
+    showToast("There's no conversation to copy yet.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(getTranscript());
+    showToast("Conversation copied.");
+  } catch {
+    showToast("Clipboard access is unavailable.");
+  }
+});
+
+document.getElementById("toolsButton").addEventListener("click", () => {
+  document.getElementById("toolsWrap").classList.toggle("open");
+});
+
+document.querySelectorAll(".suggestion").forEach(button => {
+  button.addEventListener("click", () => {
+    promptEl.value = button.dataset.prompt;
+    resizePrompt();
+    promptEl.focus();
+  });
+});
+
+promptEl.addEventListener("input", resizePrompt);
+
+promptEl.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+document.addEventListener("click", event => {
+  const wrap = document.getElementById("toolsWrap");
+  if (!wrap.contains(event.target)) wrap.classList.remove("open");
+});
+
+/* Interactive particle field */
+(() => {
+  const canvas = document.getElementById("particles");
+  const ctx = canvas.getContext("2d");
+
+  let width = 0;
+  let height = 0;
+  let particles = [];
+  const mouse = { x: -1000, y: -1000 };
+  const connectionDistance = 125;
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.min(
+      105,
+      Math.floor((width * height) / 11500)
+    );
+
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - .5) * .32,
+      vy: (Math.random() - .5) * .32,
+      r: Math.random() * 1.5 + .5
+    }));
+  }
+
+  window.addEventListener("resize", resize);
+
+  window.addEventListener("pointermove", event => {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+  });
+
+  window.addEventListener("pointerleave", () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance < 100 && distance > 0) {
+        const force = (100 - distance) / 100;
+        p.vx += (dx / distance) * force * .09;
+        p.vy += (dy / distance) * force * .09;
       }
-    });
-  </script>
+
+      p.vx *= .995;
+      p.vy *= .995;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = width;
+      if (p.x > width) p.x = 0;
+      if (p.y < 0) p.y = height;
+      if (p.y > height) p.y = 0;
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const distanceBetween = Math.hypot(p.x - q.x, p.y - q.y);
+
+        if (distanceBetween < connectionDistance) {
+          const alpha =
+            (1 - distanceBetween / connectionDistance) * .16;
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(239,68,68,${alpha})`;
+          ctx.lineWidth = .7;
+          ctx.stroke();
+        }
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(239,68,68,.65)";
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+})();
+
+resizePrompt();
+</script>
 </body>
 </html>

@@ -21,7 +21,6 @@
       --red-dark: #b91c1c;
       --text: #f8eeee;
       --muted: #a18a8d;
-      --radius: 18px;
     }
 
     * {
@@ -36,7 +35,7 @@
     }
 
     body {
-      font-family: "Inter", sans-serif;
+      font-family: Inter, sans-serif;
       color: var(--text);
       background: var(--bg);
     }
@@ -62,15 +61,14 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      opacity: .8;
     }
 
     .app {
       position: relative;
       z-index: 1;
-      height: 100dvh;
       display: flex;
       flex-direction: column;
+      height: 100dvh;
     }
 
     header {
@@ -80,8 +78,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
-      border-bottom: 1px solid rgba(239, 68, 68, .13);
-      background: rgba(11, 5, 6, .7);
+      border-bottom: 1px solid #ef44441c;
+      background: #0b0506c9;
       backdrop-filter: blur(18px);
     }
 
@@ -89,13 +87,13 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      font-size: 19px;
       font-weight: 800;
       letter-spacing: -.8px;
-      font-size: 19px;
     }
 
     .brand-name {
-      background: linear-gradient(110deg, #fff 20%, #ffb4b4 70%, #ef4444);
+      background: linear-gradient(110deg, #fff, #ffb4b4 70%, #ef4444);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -108,8 +106,8 @@
       place-items: center;
       border-radius: 12px;
       background: linear-gradient(145deg, #f04444, #991b1b);
-      box-shadow: 0 0 25px #ef444433, inset 0 1px #ffffff30;
-      animation: logoFloat 4s ease-in-out infinite;
+      box-shadow: 0 0 25px #ef444433;
+      animation: float 4s ease-in-out infinite;
     }
 
     .logo svg {
@@ -117,19 +115,18 @@
       height: 23px;
     }
 
-    @keyframes logoFloat {
+    @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-3px); }
     }
 
     .header-actions {
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
     }
 
-    .header-button,
-    .icon-button {
+    .header-button, .icon-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -139,7 +136,7 @@
       background: #170b0d;
       color: #d8c5c7;
       cursor: pointer;
-      transition: .2s ease;
+      transition: .2s;
     }
 
     .header-button {
@@ -148,20 +145,13 @@
       font-weight: 600;
     }
 
-    .header-button:hover,
-    .icon-button:hover {
+    .header-button:hover, .icon-button:hover {
       border-color: #8e3038;
       background: #251014;
       color: white;
     }
 
-    .icon-button {
-      width: 37px;
-      height: 37px;
-    }
-
-    .icon-button svg,
-    .header-button svg {
+    .header-button svg, .icon-button svg {
       width: 16px;
       height: 16px;
       flex-shrink: 0;
@@ -181,10 +171,10 @@
       margin: auto 0;
       padding: 35px 24px;
       text-align: center;
-      animation: fadeIn .6s ease both;
+      animation: appear .5s ease both;
     }
 
-    @keyframes fadeIn {
+    @keyframes appear {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
@@ -198,7 +188,7 @@
       border: 1px solid #7d252c;
       border-radius: 25px;
       background: linear-gradient(145deg, #351114, #17080a);
-      box-shadow: 0 0 65px #ef44441a, inset 0 1px #ffffff12;
+      box-shadow: 0 0 65px #ef44441a;
     }
 
     .welcome-logo svg {
@@ -213,7 +203,7 @@
       letter-spacing: -2.8px;
       line-height: 1.15;
       font-weight: 800;
-      background: linear-gradient(115deg, #fff 10%, #ffd4d4 55%, #ef4444 100%);
+      background: linear-gradient(115deg, #fff 10%, #ffd4d4 55%, #ef4444);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -241,9 +231,9 @@
       padding: 15px 16px;
       border: 1px solid var(--border);
       border-radius: 15px;
-      background: rgba(25, 12, 14, .8);
+      background: #190c0ecc;
       cursor: pointer;
-      transition: .2s ease;
+      transition: .2s;
     }
 
     .suggestion:hover {
@@ -292,7 +282,7 @@
       display: flex;
       gap: 13px;
       align-items: flex-start;
-      animation: fadeIn .25s ease both;
+      animation: appear .25s ease both;
       min-width: 0;
     }
 
@@ -346,20 +336,30 @@
     }
 
     .message-text pre {
-      position: relative;
       overflow-x: auto;
       padding: 17px;
       margin: 13px 0;
       border: 1px solid #482027;
       border-radius: 12px;
       background: #0c0708;
+      white-space: pre;
     }
 
     .message-text pre code {
       padding: 0;
       border: none;
       background: transparent;
-      white-space: pre;
+    }
+
+    .message-text ul, .message-text ol {
+      padding-left: 24px;
+    }
+
+    .message-text blockquote {
+      border-left: 3px solid #a53a43;
+      margin: 12px 0;
+      padding: 3px 12px;
+      color: #bfa9ac;
     }
 
     .message-tools {
@@ -416,7 +416,7 @@
     .composer {
       border: 1px solid #4b2026;
       border-radius: 19px;
-      background: rgba(24, 12, 14, .94);
+      background: #180c0ef2;
       box-shadow: 0 12px 50px #00000035, 0 0 25px #ef444408;
       transition: border-color .2s, box-shadow .2s;
     }
@@ -504,7 +504,7 @@
 
     #send:disabled {
       opacity: .55;
-      cursor: not-allowed;
+      cursor: wait;
       transform: none;
     }
 
@@ -535,7 +535,7 @@
       place-items: center;
       border: 1px solid #54232a;
       border-radius: 15px;
-      background: rgba(27, 12, 15, .95);
+      background: #1b0c0ff2;
       color: #f1b3b7;
       cursor: pointer;
       box-shadow: 0 5px 25px #00000035;
@@ -561,14 +561,14 @@
       padding: 7px;
       border: 1px solid #492027;
       border-radius: 15px;
-      background: rgba(22, 10, 12, .98);
+      background: #160a0cf7;
       box-shadow: 0 12px 45px #00000070;
       backdrop-filter: blur(20px);
       opacity: 0;
       visibility: hidden;
       transform: translateY(8px) scale(.97);
       transform-origin: bottom left;
-      transition: .18s ease;
+      transition: .18s;
     }
 
     .tools-menu.open {
@@ -642,35 +642,18 @@
       .header-button { padding: 9px; }
       .header-button span { display: none; }
 
-      .welcome {
-        padding: 25px 17px;
-      }
-
+      .welcome { padding: 25px 17px; }
       .welcome-logo {
         width: 65px;
         height: 65px;
         border-radius: 21px;
       }
 
-      h1 {
-        letter-spacing: -1.7px;
-      }
-
-      .subtitle {
-        font-size: 13px;
-      }
-
-      .suggestions {
-        gap: 8px;
-      }
-
-      .suggestion {
-        padding: 12px;
-      }
-
-      .chat {
-        padding: 24px 14px;
-      }
+      h1 { letter-spacing: -1.7px; }
+      .subtitle { font-size: 13px; }
+      .suggestions { gap: 8px; }
+      .suggestion { padding: 12px; }
+      .chat { padding: 24px 14px; }
 
       .composer-area {
         padding: 10px 12px 14px;
@@ -686,18 +669,9 @@
         height: 40px;
       }
 
-      .composer-bottom {
-        padding-left: 12px;
-      }
-
-      .hint {
-        display: none;
-      }
-
-      .disclaimer {
-        font-size: 9px;
-        padding: 0 10px;
-      }
+      .composer-bottom { padding-left: 12px; }
+      .hint { display: none; }
+      .disclaimer { font-size: 9px; padding: 0 10px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -717,10 +691,8 @@
       <div class="brand">
         <div class="logo">
           <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <path d="M16 3L19.2 11.8L28 15L19.2 18.2L16 27L12.8 18.2L4 15L12.8 11.8L16 3Z"
-              fill="white"/>
-            <path d="M25 21L26.4 24.6L30 26L26.4 27.4L25 31L23.6 27.4L20 26L23.6 24.6L25 21Z"
-              fill="#ffd0d0"/>
+            <path d="M16 3L19.2 11.8L28 15L19.2 18.2L16 27L12.8 18.2L4 15L12.8 11.8L16 3Z" fill="white"/>
+            <path d="M25 21L26.4 24.6L30 26L26.4 27.4L25 31L23.6 27.4L20 26L23.6 24.6L25 21Z" fill="#ffd0d0"/>
           </svg>
         </div>
         <span class="brand-name">Crimson AI</span>
@@ -734,7 +706,7 @@
           <span>Export</span>
         </button>
 
-        <button class="header-button" id="newChatTop" title="Start a new chat">
+        <button class="header-button" id="newChatTop" title="New chat">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M12 5v14M5 12h14"/>
           </svg>
@@ -747,10 +719,8 @@
       <section class="welcome" id="welcome">
         <div class="welcome-logo">
           <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <path d="M16 2L20 12L30 16L20 20L16 30L12 20L2 16L12 12L16 2Z"
-              fill="#ff7777"/>
-            <path d="M16 8L18.7 14L24 16L18.7 18L16 24L13.3 18L8 16L13.3 14L16 8Z"
-              fill="#fff2f2"/>
+            <path d="M16 2L20 12L30 16L20 20L16 30L12 20L2 16L12 12L16 2Z" fill="#ff7777"/>
+            <path d="M16 8L18.7 14L24 16L18.7 18L16 24L13.3 18L8 16L13.3 14L16 8Z" fill="#fff2f2"/>
           </svg>
         </div>
 
@@ -856,8 +826,7 @@
     <button class="tools-button" id="toolsButton" aria-label="Open tools menu" title="Tools">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <circle cx="12" cy="12" r="3"/>
-        <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.6.9l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.6-.9l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-1.9l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.6-.9l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.6.9l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 1.8Z"
-          transform="translate(-1 -1)"/>
+        <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.6.9l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.6-.9l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-1.9l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.6-.9l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.6.9l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 1.8Z" transform="translate(-1 -1)"/>
       </svg>
     </button>
   </div>
@@ -867,25 +836,22 @@
   <script>
     // ============================================================
     // API CONFIGURATION
-    // Paste your OpenRouter API key between the quotation marks.
-    // Example format: sk-or-v1-...
+    // Paste your OpenRouter key between these quotation marks.
     // ============================================================
 
-    const API_KEY = "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";
-
-    const MODEL = "anthropic/claude-haiku-5.5";
+    const OPENROUTER_API_KEY = "PASTE_YOUR_OPENROUTER_API_KEY_HERE";
+    const AI_MODEL = "anthropic/claude-haiku-5.5";
     const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     // ============================================================
     // APPLICATION STATE
     // ============================================================
 
-    const conversation = [];
+    let conversationHistory = [];
     let busy = false;
-    let typingElement = null;
-    let toastTimeout = null;
+    let toastTimeout;
 
-    const $ = (selector) => document.querySelector(selector);
+    const $ = selector => document.querySelector(selector);
 
     const welcome = $("#welcome");
     const chat = $("#chat");
@@ -893,7 +859,6 @@
     const promptInput = $("#prompt");
     const sendButton = $("#send");
     const toolsMenu = $("#toolsMenu");
-    const toolsButton = $("#toolsButton");
     const toastElement = $("#toast");
 
     function showToast(message) {
@@ -922,7 +887,7 @@
     }
 
     function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, (character) => ({
+      return String(value).replace(/[&<>"']/g, character => ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
@@ -931,29 +896,34 @@
       })[character]);
     }
 
-    // Lightweight Markdown formatting for messages.
-    function formatMessage(text) {
-      let result = escapeHTML(text);
+    // Simple Markdown formatting. HTML from the model is escaped first.
+    function formatMessage(content) {
+      const blocks = [];
 
-      result = result.replace(
-        /```([a-zA-Z0-9_+-]*)\n?([\s\S]*?)```/g,
-        (_, language, code) =>
-          `<pre><code>${code.trim()}</code></pre>`
+      let result = escapeHTML(content).replace(
+        /```([a-zA-Z0-9_+-]*)[ \t]*\n?([\s\S]*?)```/g,
+        (_, language, code) => {
+          const index = blocks.length;
+          blocks.push(`<pre><code>${code.replace(/^\n|\n$/g, "")}</code></pre>`);
+          return `%%CODEBLOCK${index}%%`;
+        }
       );
 
       result = result.replace(/`([^`\n]+)`/g, "<code>$1</code>");
       result = result.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
       result = result.replace(/\*(.+?)\*/g, "<em>$1</em>");
+      result = result.replace(/^&gt; (.+)$/gm, "<blockquote>$1</blockquote>");
+      result = result.replace(/^\s*[-*] (.+)$/gm, "• $1");
       result = result.replace(/\n/g, "<br>");
 
-      // Restore newlines inside code blocks.
-      result = result.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g,
-        (_, code) => `<pre><code>${code.replace(/&lt;br&gt;/g, "\n")}</code></pre>`);
+      result = result.replace(/%%CODEBLOCK(\d+)%%/g, (_, index) => {
+        return blocks[Number(index)];
+      });
 
       return result;
     }
 
-    function addMessage(role, content, options = {}) {
+    function addMessage(role, content) {
       showChat();
 
       const wrapper = document.createElement("article");
@@ -976,7 +946,7 @@
 
       body.append(name, text);
 
-      if (role === "assistant" && !options.typing) {
+      if (role === "assistant") {
         const tools = document.createElement("div");
         tools.className = "message-tools";
 
@@ -997,14 +967,15 @@
 
       wrapper.append(avatar, body);
       messages.append(wrapper);
-
       scrollToBottom();
+
       return wrapper;
     }
 
     function showTyping() {
       const wrapper = document.createElement("article");
       wrapper.className = "message assistant";
+      wrapper.id = "typingIndicator";
 
       wrapper.innerHTML = `
         <div class="avatar">✦</div>
@@ -1015,27 +986,29 @@
       `;
 
       messages.append(wrapper);
-      typingElement = wrapper;
       scrollToBottom();
     }
 
     function removeTyping() {
-      if (typingElement) {
-        typingElement.remove();
-        typingElement = null;
-      }
+      $("#typingIndicator")?.remove();
     }
 
     // ============================================================
-    // OPENROUTER CHAT REQUEST
+    // CHAT REQUEST
+    //
+    // This uses the same endpoint, headers, model, max_tokens,
+    // and temperature as the working Claude test you provided.
     // ============================================================
 
     async function sendMessage() {
-      const content = promptInput.value.trim();
+      const text = promptInput.value.trim();
 
-      if (!content || busy) return;
+      if (!text || busy) return;
 
-      if (!API_KEY || API_KEY === "PASTE_YOUR_OPENROUTER_API_KEY_HERE") {
+      if (
+        !OPENROUTER_API_KEY ||
+        OPENROUTER_API_KEY === "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"
+      ) {
         showToast("Add your OpenRouter API key in the code first.");
         return;
       }
@@ -1043,57 +1016,50 @@
       promptInput.value = "";
       promptInput.style.height = "auto";
 
-      conversation.push({
+      conversationHistory.push({
         role: "user",
-        content
+        content: text
       });
 
-      addMessage("user", content);
+      addMessage("user", text);
       setBusy(true);
       showTyping();
 
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: MODEL,
-            messages: conversation,
-            temperature: 0.7
-          })
-        });
+        // Intentionally mirrors the successful test's request structure.
+        const response = await fetch(
+          "https://openrouter.ai/api/v1/chat/completions",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "anthropic/claude-haiku-5.5",
+              messages: conversationHistory,
+              max_tokens: 600,
+              temperature: 0.7
+            })
+          }
+        );
 
-        const rawBody = await response.text();
-
-        let data;
-
-        try {
-          data = JSON.parse(rawBody);
-        } catch {
-          throw new Error(
-            `OpenRouter returned an unexpected response (HTTP ${response.status}).`
-          );
-        }
+        const data = await response.json();
 
         if (!response.ok) {
-          const message =
+          throw new Error(
             data?.error?.message ||
-            data?.message ||
-            `HTTP ${response.status}`;
-
-          throw new Error(`${message} (HTTP ${response.status})`);
+            `HTTP ${response.status}: ${response.statusText}`
+          );
         }
 
         const answer = data?.choices?.[0]?.message?.content;
 
-        if (typeof answer !== "string" || !answer.trim()) {
-          throw new Error("The model returned an empty response.");
+        if (typeof answer !== "string") {
+          throw new Error("The API returned no text response.");
         }
 
-        conversation.push({
+        conversationHistory.push({
           role: "assistant",
           content: answer
         });
@@ -1102,20 +1068,28 @@
         addMessage("assistant", answer);
 
       } catch (error) {
+        console.error("Crimson AI request failed:", error);
         removeTyping();
 
-        console.error("Crimson AI request failed:", error);
+        // Remove the failed user turn from history so the next request
+        // doesn't contain a user message with no corresponding response.
+        if (
+          conversationHistory.length &&
+          conversationHistory[conversationHistory.length - 1].role === "user"
+        ) {
+          conversationHistory.pop();
+        }
 
-        let message = error.message || "Unknown error";
+        let errorMessage = error.message || "Unknown error";
 
         if (error instanceof TypeError) {
-          message =
-            "Network request failed. Check your internet connection and browser console. The browser may also be blocking the request.";
+          errorMessage =
+            "Network request failed. Check your connection and browser console.";
         }
 
         addMessage(
           "assistant",
-          `**Request failed**\n\n${message}\n\nCheck your OpenRouter API key, model ID, and browser network permissions.`
+          `Request failed\n\n${errorMessage}`
         );
 
       } finally {
@@ -1134,7 +1108,7 @@
         return;
       }
 
-      conversation.length = 0;
+      conversationHistory = [];
       messages.replaceChildren();
       chat.classList.remove("active");
       welcome.style.display = "";
@@ -1145,38 +1119,38 @@
     }
 
     function exportConversation() {
-      if (conversation.length === 0) {
+      if (!conversationHistory.length) {
         showToast("There's no conversation to export yet.");
         return;
       }
 
-      const output = conversation.map((message) => {
+      const output = conversationHistory.map(message => {
         const heading = message.role === "user" ? "You" : "Crimson AI";
         return `${heading}\n${message.content}`;
       }).join("\n\n------------------------------\n\n");
 
-      const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob([output], {
+        type: "text/plain;charset=utf-8"
+      });
+
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
 
       link.href = url;
       link.download = `crimson-ai-chat-${new Date().toISOString().slice(0, 10)}.txt`;
+
       document.body.append(link);
       link.click();
       link.remove();
-      URL.revokeObjectURL(url);
 
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast("Conversation exported");
       toolsMenu.classList.remove("open");
     }
 
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-
     sendButton.addEventListener("click", sendMessage);
 
-    promptInput.addEventListener("keydown", (event) => {
+    promptInput.addEventListener("keydown", event => {
       if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
         event.preventDefault();
         sendMessage();
@@ -1189,25 +1163,12 @@
         Math.min(promptInput.scrollHeight, 200) + "px";
     });
 
-    document.querySelectorAll(".suggestion").forEach((button) => {
+    document.querySelectorAll(".suggestion").forEach(button => {
       button.addEventListener("click", () => {
         promptInput.value = button.dataset.prompt || "";
         promptInput.focus();
         promptInput.dispatchEvent(new Event("input"));
       });
-    });
-
-    toolsButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toolsMenu.classList.toggle("open");
-    });
-
-    toolsMenu.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
-
-    document.addEventListener("click", () => {
-      toolsMenu.classList.remove("open");
     });
 
     $("#newChatTop").addEventListener("click", newChat);
@@ -1222,7 +1183,7 @@
         return;
       }
 
-      conversation.length = 0;
+      conversationHistory = [];
       messages.replaceChildren();
       chat.classList.remove("active");
       welcome.style.display = "";
@@ -1235,8 +1196,23 @@
       showToast("Crimson AI · Powered by OpenRouter");
     });
 
+    const toolsButton = $("#toolsButton");
+
+    toolsButton.addEventListener("click", event => {
+      event.stopPropagation();
+      toolsMenu.classList.toggle("open");
+    });
+
+    toolsMenu.addEventListener("click", event => {
+      event.stopPropagation();
+    });
+
+    document.addEventListener("click", () => {
+      toolsMenu.classList.remove("open");
+    });
+
     // ============================================================
-    // INTERACTIVE RED PARTICLE BACKGROUND
+    // RED PARTICLE BACKGROUND
     // ============================================================
 
     const canvas = $("#particles");
@@ -1246,7 +1222,6 @@
     let height = 0;
     let particles = [];
     let mouse = { x: -1000, y: -1000 };
-    let animationFrame;
 
     function resizeCanvas() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -1308,7 +1283,6 @@
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i];
           const b = particles[j];
-
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -1326,12 +1300,12 @@
         }
       }
 
-      animationFrame = requestAnimationFrame(animateParticles);
+      requestAnimationFrame(animateParticles);
     }
 
     window.addEventListener("resize", resizeCanvas);
 
-    window.addEventListener("pointermove", (event) => {
+    window.addEventListener("pointermove", event => {
       mouse.x = event.clientX;
       mouse.y = event.clientY;
     });

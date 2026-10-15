@@ -93,9 +93,9 @@ header .brand img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0
 
 <script>
 // ===================== EDIT HERE =====================
-// Put the URL of your proxy app here (the one running proxy.js), e.g. "https://tabspace-api.wasmer.app"
+// Put your Vercel project URL here (no trailing slash), e.g. "https://tabspace-api.vercel.app"
 const CONFIG = {
-  API_URL: "https://YOUR-PROXY-APP.wasmer.app",
+  API_URL: "https://YOUR-PROJECT.vercel.app",
   SUGGESTIONS: [
     "Explain how the internet works",
     "Help me write a polite email",
@@ -178,6 +178,7 @@ async function send(text){
   text = (text ?? input.value).trim();
   if (!text || busy) return;
 
+  if (CONFIG.API_URL.toLowerCase().includes('your-project')) { addMsg('bot', 'Set <code>API_URL</code> in index.html to your Vercel project URL first.', 'err'); return; }
   input.value = ''; input.style.height = 'auto';
   addMsg('user', text);
   history.push({ role: 'user', content: text });
@@ -191,7 +192,7 @@ async function send(text){
     const res = await fetch(CONFIG.API_URL + '/api/chat', {
       method: 'POST',
       signal: controller.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },   // plain text avoids a CORS preflight request
       body: JSON.stringify({ messages: history })
     });
 
@@ -227,7 +228,9 @@ async function send(text){
     } else {
       history.pop();
       bubble.classList.add('err');
-      bubble.textContent = err.message || 'Something went wrong.';
+      bubble.textContent = err instanceof TypeError
+        ? "Can't reach the proxy. Check that API_URL is correct and the proxy app is running."
+        : (err.message || 'Something went wrong.');
     }
   } finally {
     setBusy(false); controller = null; input.focus();

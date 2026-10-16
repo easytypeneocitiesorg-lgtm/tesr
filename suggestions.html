@@ -30,8 +30,9 @@
 // DEMO CONFIGURATION: replace with your Discord webhook only for local testing.
 // For a public website, send submissions through your own serverless endpoint instead;
 // never publish a Discord webhook URL in client-side code.
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1560521230380179467/IoW1i37uUhYhekp6ca0u84bAREh_3OFEUGn_VcKTm9uV6zVxfZi40kX78e-_cAZEQV0x";
+const WEBHOOK_URL = "";
 const STORAGE_KEY = "tabspace_suggestion_last_submission_v1";
+const RESET_TOKEN_KEY = "tabspace_suggestion_reset_token_v1";
 const form = document.getElementById('suggestionForm');
 const message = document.getElementById('message');
 const submitBtn = document.getElementById('submitBtn');
@@ -39,10 +40,20 @@ const limitText = document.getElementById('limitText');
 const dateKey = () => new Date().toLocaleDateString('en-CA');
 function alreadySubmitted(){ try { return localStorage.getItem(STORAGE_KEY) === dateKey(); } catch { return false; } }
 function setMessage(text, kind){ message.textContent=text; message.className='message show '+kind; }
-function refreshLimit(){ const locked=alreadySubmitted(); submitBtn.disabled=locked; limitText.textContent=locked?'Daily suggestion already used':'One suggestion per day'; if(locked){setMessage('You have already submitted a suggestion today. Please come back tomorrow to send another.','error');} }
+function refreshLimit(){ const locked=alreadySubmitted(); submitBtn.disabled=false; limitText.textContent='One suggestion per day'; }
+async function checkResetFile(){
+ try{
+   const response=await fetch(new URL('reset', window.location.href).href,{cache:'no-store'});
+   if(!response.ok)return;
+   const token=(await response.text()).trim();
+   if(!token)return;
+   const previous=localStorage.getItem(RESET_TOKEN_KEY);
+   if(previous!==token){localStorage.removeItem(STORAGE_KEY);localStorage.setItem(RESET_TOKEN_KEY,token);}
+ }catch(error){/* Reset file is optional; continue normally if unavailable. */}
+}
 form.addEventListener('submit', async (event)=>{
  event.preventDefault();
- if(alreadySubmitted()){refreshLimit();return;}
+ if(alreadySubmitted()){setMessage('You have already submitted a suggestion today. Please come back tomorrow to send another.','error');return;}
  const realName=document.getElementById('realName').value.trim();
  const suggestion=document.getElementById('suggestion').value.trim();
  const reason=document.getElementById('reason').value.trim();
@@ -55,10 +66,10 @@ form.addEventListener('submit', async (event)=>{
    const response=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
    if(!response.ok)throw new Error('Webhook rejected the request');
    try{localStorage.setItem(STORAGE_KEY,dateKey());}catch{}
-   form.reset();setMessage('Your suggestion was sent successfully. Thanks for helping improve the site!','success');refreshLimit();
+   form.reset();setMessage('Your suggestion has been sent! Thanks for helping improve the site.','success');refreshLimit();
  }catch(error){setMessage('Could not send your suggestion. Please try again later.','error');submitBtn.disabled=false;submitBtn.innerHTML='Send suggestion <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>';}
 });
-refreshLimit();
+checkResetFile().finally(refreshLimit);
 // Lightweight interactive red particle background.
 (()=>{const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');let w=0,h=0,particles=[],mouse={x:-9999,y:-9999};function resize(){w=canvas.width=innerWidth*devicePixelRatio;h=canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);const count=Math.min(90,Math.floor(innerWidth/15));particles=Array.from({length:count},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.5+.6}));}addEventListener('resize',resize);addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});addEventListener('mouseleave',()=>{mouse.x=-9999;mouse.y=-9999});function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(let i=0;i<particles.length;i++){const p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>innerWidth)p.vx*=-1;if(p.y<0||p.y>innerHeight)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<115&&d>0){p.x+=dx/d*.65;p.y+=dy/d*.65;}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(239,68,68,.52)';ctx.fill();for(let j=i+1;j<particles.length;j++){const q=particles[j],dist=Math.hypot(p.x-q.x,p.y-q.y);if(dist<115){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(185,28,28,${(1-dist/115)*.20})`;ctx.lineWidth=.7;ctx.stroke();}}}requestAnimationFrame(draw);}resize();draw();})();
 </script>
